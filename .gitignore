@@ -1,0 +1,38 @@
+# Executables and binaries
+*.bin
+*.com
+*.exe
+*.elf
+*.elf16
+*.elf32
+*.elf64
+*.out
+*.app
+
+# Compiled dynamic libraries
+*.dll
+*.so
+*.dylib
+
+# Compiled static libraries
+*.lib
+*.a
+*.lai
+*.la
+
+# Compiled object files
+*.obj
+*.o
+*.slo
+*.lo
+
+# Precompiled headers
+*.pch
+*.gch
+
+# Prerequisites
+*.d
+
+# Fortran module files
+*.mod
+*.smod
