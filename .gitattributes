@@ -1,0 +1,14 @@
+# All files
+*               text=auto
+
+# Git special files
+.gitignore      text eol=lf
+.gitattributes  text eol=lf
+
+# License
+LICENSE         text eol=lf
+.license        text eol=lf
+
+# Markdown
+*.md            text eol=lf
+*.markdown      text eol=lf
