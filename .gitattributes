@@ -12,3 +12,22 @@ LICENSE         text eol=lf
 # Markdown
 *.md            text eol=lf
 *.markdown      text eol=lf
+
+# Plain text
+*.txt           text eol=lf
+
+# Makefiles
+Makefile        text eol=lf
+
+# Windows CMD and PowerShell scripts
+*.bat           text eol=crlf
+*.cmd           text eol=crlf
+*.ps1           text eol=crlf
+
+# Shell scirpts
+*.bash          text eol=lf
+*.fish          text eol=lf
+*.sh            text eol=lf
+
+# Bochs configuration files
+*.bxrc          text eol=lf

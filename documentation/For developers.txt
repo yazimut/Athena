@@ -1,0 +1,152 @@
+In this file are described the standards of codding.
+You MUST follow them, else your pull-requests will be declined.
+More specific rules override more common.
+In this file a word "tab" means symbol for indentation, excluding specific 
+cases.
+
+
+
+################################################################
+                       Table of contents                        
+################################################################
+
+	0. Table of contents
+	1. Common - common rules about text files and developing.
+	2. Git - rules about working with git repository.
+	3. .txt documentation - rules about filling a documentation.
+	4. Markdown - rules about filling a markdown files.
+	5. Makefile - rules about writing Make scripts.
+
+
+
+
+
+
+################################################################
+                             Common                             
+################################################################
+
+Project root directory:
+	This is a special directory of project. Here you can put some special 
+	files (like a license) or build/run scripts. Don't place here files 
+	with code or post-build files!
+
+Indentation:
+	Tabs are allowed. Tab width must be equal 4 spaces. In such case you also 
+	can use indentation by spaces, but you have to put 4 spaces instead of 
+	1 tab symbol.
+
+Line-endings:
+	All text files, excluding Windows CMD and PowerShell scripts, must have a 
+	UNIX line-endings format (LF). Windows CMD and PowerShell scripts must 
+	have a Windows line-endings format (CR LF).
+
+End of file:
+	Each text file must be ended with a new line symbol.
+
+
+
+################################################################
+                              Git                               
+################################################################
+
+.gitignore:
+	Tabs are prohibited! Use 4 spaces instead of tabs.
+
+.gitattributes:
+	Tabs are prohibited! Use 4 spaces instead of tabs.
+
+Branches:
+	Use the branches to develop some new feature. Don't create a new branch 
+	for a fixes - make them right on this branch and then squash the commits.
+
+Branch naming:
+	Branch names must be clear for all people and have to represent feature 
+	that you are developing. Don't use such words like a "dev". Example: 
+	"dev_Feature" - instead of this use "Feature".
+
+Merges:
+	All merges should be performed with a merge commit. Fast-forward merges 
+	are allowed, but only for very small non-important merges, if it will not 
+	hurt a project history readability. Merge commit must have a name 
+	"Merge <Source branch name> into <Destination branch name> - <Main 
+	change>" with a detailed change-log in a commit comment. DON'T remove a 
+	merged branch!
+
+Pull-requests:
+	PRs must have a detailed change-log with description of fixes and new 
+	features. Before creating PR make sure that your source branch is cleaned 
+	from dirty commits, like a fixes.
+
+Versions:
+	Releases:
+		Merge all scheduled changes in a "master" branch. Don't forget to 
+		update the change-log file! Squash all commits since last update in a 
+		one commit. This commit must have a change-log as commit comment. Tag 
+		this commit with "v<Version>-Release". Push it to the remote 
+		repository. Smile and be happy - Athena has a new release :)
+
+
+
+################################################################
+                        .txt documentation                      
+################################################################
+
+String length:
+	Length of each string must be lower than 80 characters!
+
+Code insertions:
+	If you want to put in the documentation some code, just wrap it 
+	with triple tilde symbol. Right after first triple tilde in square 
+	brackets you may specify the code language or interpreter. For in-line 
+	code strings it will be enough to wrap the code string with tilde symbol.
+
+
+
+################################################################
+                            Markdown                            
+################################################################
+
+Indentation:
+	Tabs are prohibited! Use 4 spaces instead of tabs.
+
+
+
+################################################################
+                            Makefile                            
+################################################################
+
+File name letter case:
+	Makefiles must have "Makefile" as name in file system. (Case-sensitive)
+
+Basic targets:
+	Each Makefile must have following targets:
+		"build"   - main build script;
+		"clean"   - clean folder from unnecessary and post-build files;
+		"all"     - all main targets;
+		"re-make" - re-build project. Generally 'clean build'.
+	This targets must be the first ones in Makefile right in this order!
+
+Indentation:
+	Targets must be aligned at the beginning of the line.
+	Actions must have one tab more than its target.
+
+Phony targets:
+	All phony targets must be described at the start of Makefile.
+
+Special instructions:
+	In main Makefile defined several special instructions. You may them for 
+	your needs. Also you may define new yours instructions in main Makefile.
+
+Nothing to do:
+	If there is nothing to do in current target, temporary make it phony and 
+	put `echo "\e[1;33mNothing to <do> \e[0m"`. Use appropriate verb instead 
+	of "do". Also you may use special instruction "error" to raise an error 
+	for a Make, if you need it.
+	Example:
+		``` [Make]
+		.PHONY: test
+		test:
+			echo "\e[1;33mNothing to test \e[0m"
+			$(error)
+		```
