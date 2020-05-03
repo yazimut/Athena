@@ -21,6 +21,7 @@ Prepare_Debian ()
 	sudo apt-get install -y git make 
 	sudo apt-get install -y qemu qemu-kvm qemu-system qemu-user 
 	sudo apt-get install -y bochs bochs-doc bochs-term bochs-x bochsbios bximage vgabios
+	sudo apt-get install -y nasm
 }
 
 printf "Local timestamp: \e[1;33m"

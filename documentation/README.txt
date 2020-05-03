@@ -49,6 +49,7 @@ And a relevant requirements for chosen Linux distro.
 * Apt 1.6.12
 * Git 2.17.1
 * GNU Make 4.1
+* Netwide assembler 2.14.02
 
 
 

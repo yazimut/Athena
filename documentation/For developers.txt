@@ -16,6 +16,7 @@ cases.
 	3. .txt documentation - rules about filling a documentation.
 	4. Markdown - rules about filling a markdown files.
 	5. Makefile - rules about writing Make scripts.
+	6. Assembly language - rules about coding in assembly language.
 
 
 
@@ -150,3 +151,77 @@ Nothing to do:
 			echo "\e[1;33mNothing to test \e[0m"
 			$(error)
 		```
+
+
+
+################################################################
+                       Assembly language                        
+################################################################
+
+	Comment to this part of documentation:
+		This part of documentation describes the rules of coding in ALL 
+		dialects of Assembly language. Exceptions will be marked.
+
+File extensions:
+	All files with Assembly language source code must have ".asm" extension.
+	Files can have prefix-extensions like a ".macros.asm", ".inc.asm", etc.
+	All file with disassembled code must have ".disasm" extension.
+
+Letter case:
+	Instructions are in lowercase.
+	Registers are in uppercase.
+	Important labels are in uppercase, other - it's up to you.
+	Variables begin with capital letter.
+	Procedures and functions begin with underscore and capital letter.
+	Macros begin with double underscore and capital letter.
+
+Respect your colleagues:
+	Assembly language is a hardly readable one, so try to describe your logic 
+	as frequent as possible - comment each block of code and describe, what it 
+	should do and why was you decided to do this by exactly the such way.
+
+Re-include protection:
+	All files must have re-include protection. Files macro must begin and end 
+	with double underscore. File extension must be divided from file name with 
+	one underscore. Letter case of file macro should be equal with file name 
+	and extension. If it is impossible to make re-include protection right 
+	here, put the comment with description, why is it impossible.
+
+Endif:
+	Each directive "%endif" must be commented with "%if" condition. Example:
+		``` [Assembly language - NASM preprocessor]
+		%ifndef __TheFile_ext__
+		%define __TheFile_ext__
+		%endif ; __TheFile_ext__
+		```
+
+Number systems:
+	Try to use hexadecimal numbers anywhere. But, of course, you may use also 
+	binary, octal and decimal numbers, if it increases readability of the code.
+
+Indentation:
+	Procedures and functions:
+		The body of method must have one tab more, than the definition.
+		Instruction "ret" ("retn" and "retf") must have the same indentation 
+		as a definition.
+		Stack-save instructions and macros (like "push" and "pop") should have 
+		the same indentation as a definition.
+
+	If-else branching:
+		Section A (the statement is true) always has the same indentation with 
+		a statement. Section B (the statement is false) has a one tab symbol 
+		more, than the statement. Example:
+			```` [Assembly language - NASM dialect]
+				; The statement - AL < 0x3a
+				cmp AL, 0x3a
+				jl .print
+					; Section B - the statement is false.
+					add AL, 0x07
+			.print:
+				; Section A - the statement is true.
+				mov AH, 0x0a
+				int 0x10
+			````
+
+	Cycles:
+		The body of cycle must have one tab more, than its condition.
