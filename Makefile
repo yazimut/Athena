@@ -12,15 +12,17 @@ export VM_DISK=$(PROJECT_DIR)/VirtualMachine/Athena.raw
 
 .PHONY: build clean all re-make
 .PHONY: rawdisk install
+.PHONY: ULM
 
 
-build:
-	echo "\e[1;33mNothing to build \e[0m"
+build: ULM
 
 clean:
-	echo "\e[1;33mNothing to clean \e[0m"
+	cd ./ULM && $(MAKE) clean
 
-all: build install
+all:
+	cd ./ULM && $(MAKE) all
+	$(MAKE) install
 
 re-make: clean build
 
@@ -30,3 +32,6 @@ rawdisk:
 
 install:
 	echo "\e[1;33mNothing to install \e[0m"
+
+ULM:
+	cd ./ULM && $(MAKE)
