@@ -1,20 +1,16 @@
 #-------------------------------------------------------------------------------
 # Makefile for Athena operating system.
-#  Unified loading method.
+#  Unified loading method for loading OS from under UEFI firmware.
 
 .PHONY: build clean all re-make
-.PHONY: UEFI
 
 
-build: UEFI
+build:
+	echo "\e[1;33mNothing to build \e[0m"
 
 clean:
-	cd ./UEFI && $(MAKE) clean
+	echo "\e[1;33mNothing to clean \e[0m"
 
-all:
-	cd ./UEFI && $(MAKE) all
+all: build
 
 re-make: clean build
-
-UEFI:
-	cd ./UEFI && $(MAKE)
