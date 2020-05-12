@@ -31,3 +31,9 @@ Makefile        text eol=lf
 
 # Bochs configuration files
 *.bxrc          text eol=lf
+
+# Linker scripts
+*.ld            text eol=lf
+
+# Assembly language
+*.asm           text eol=lf

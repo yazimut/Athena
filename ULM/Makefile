@@ -3,14 +3,18 @@
 #  Unified loading method.
 
 .PHONY: build clean all re-make
+.PHONY: BIOS
 
 
-build:
-	echo "\e[1;33mNothing to build \e[0m"
+build: BIOS
 
 clean:
-	echo "\e[1;33mNothing to clean \e[0m"
+	cd ./BIOS && $(MAKE) clean
 
-all: build
+all:
+	cd ./BIOS && $(MAKE) all
 
 re-make: clean build
+
+BIOS:
+	cd ./BIOS && $(MAKE)

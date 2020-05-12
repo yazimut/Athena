@@ -10,6 +10,10 @@ export error=cat / 2>/dev/null
 export PROJECT_DIR=$$(pwd)
 export VM_DISK=$(PROJECT_DIR)/VirtualMachine/Athena.raw
 
+# Compilers
+export ASM=nasm
+export DISASM=ndisasm
+
 .PHONY: build clean all re-make
 .PHONY: rawdisk install
 .PHONY: ULM
@@ -31,7 +35,8 @@ rawdisk:
 	qemu-img create -f raw $(VM_DISK) 64M
 
 install:
-	echo "\e[1;33mNothing to install \e[0m"
+	dd if=./ULM/BIOS/bin/MBS.bin of=$(VM_DISK) bs=512 count=1 conv=notrunc
+	dd if=./ULM/BIOS/bin/UEFI.elf of=$(VM_DISK) bs=512 count=128 seek=66 conv=notrunc
 
 ULM:
 	cd ./ULM && $(MAKE)
