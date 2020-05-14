@@ -5,10 +5,12 @@
 
 global _entry
 global BIOSDataArea
+global GDTR, IDTR, LDTR
 extern _pmode_entry
 
 section .text
 
+; Русский комментарий
 _entry:
 	; Init GP registers
 	xor EAX, EAX
@@ -60,7 +62,7 @@ _entry:
 	or AL, 00000010b
 	out 0x92, AL
 
-	call allocateGDT
+	call allocateGDT	; Allocating Global Descriptors Table
 
 	mov EAX, CR0
 	or AL, 00000001b
@@ -173,14 +175,80 @@ pop EAX
 pop EBP
 ret
 
+initPIC:
+push AX
+	; Disable APIC
+	mov ECX, 0x1b
+	rdmsr
+	and AH, 11110111b
+	wrmsr
+
+	; Initialize Intel 8259A Master-Slave PIC
+	; ICW #1
+	mov AL, 00010001b		; Starting initialization - 4 ICWs.
+	out 0x20, AL
+	out 0xa0, AL
+	nop
+	nop
+	nop
+	nop
+
+	; ICW #2
+	mov AL, 0x20			; Master PIC will generate IRQ #32-39
+	out 0x21, AL
+	mov AL, 0x28			; Slave PIC will generate IRQ #40-47
+	out 0xa1, AL
+	nop
+	nop
+	nop
+	nop
+
+	; ICW #3
+	mov AL, 00000100b 		; Slave PIC connected to IRQ #2 of Master PIC
+	out 0x21, AL
+	mov AL, 2				; Master PIC connected to IRQ #2 of Slave PIC
+	out 0xa1, AL
+	nop
+	nop
+	nop
+	nop
+
+	; ICW #4
+	mov AL, 0x01	 		; 80x86 mode
+	out 0x21, AL
+	out 0xa1, AL
+	nop
+	nop
+	nop
+	nop
+
+	; OCW #1
+	mov AL, 11111111b		; Masking all interrupts in Master and Slave PICs
+	out 0x21, AL
+	out 0xa1, AL
+pop AX
+ret
+
 
 section .data
 
-	; Pointer to Global Descriptor Table
+	; Pointer to Global Descriptors Table
 	;  GDTR image
 	GDTR:
 		.GDT_Limit   dw 0xffff
 		.GDT_Address dd 0x00000800
+
+	; Pointer to Interrupt Descriptors Table
+	;  IDTR image
+	IDTR:
+		.IDT_Limit   dw 0x7ff
+		.IDT_Address dd 0x00000000
+
+	; Pointer to Local Descriptors Table
+	;  LDTR image
+	LDTR:
+		.LDT_Limit   dw 0xffff
+		.LDT_Address dd 0x00010800
 
 
 section .bss

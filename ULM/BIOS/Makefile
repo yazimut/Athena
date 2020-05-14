@@ -6,11 +6,11 @@
 # Directories
 export SRC=./src
 export BIN=./bin
-export INCLUDE=./include
+export INC=./include
 
 # Compilers
 export ASM=nasm
-export ASM_FLAGS=-i $(INCLUDE)/
+export ASM_FLAGS=-i $(INC)/
 export DISASM=ndisasm
 export LINK=ld
 export LINK_ARGV=-m elf_i386 -T UEFI.ld
@@ -41,9 +41,12 @@ MBS.disasm: $(BIN)/MBS.bin
 
 
 # UEFI imitation
-$(BIN)/UEFI.elf: $(BIN)/entry.o
-	$(LINK) $(LINK_ARGV) -o $(BIN)/UEFI.elf $+
+$(BIN)/UEFI.elf: $(BIN)/entry.o $(BIN)/pmode.entry.o
+	$(LINK) $(LINK_ARGV) -o $(BIN)/UEFI.elf $^
 	"./check UEFI.elf.sh"
 
 $(BIN)/entry.o: $(SRC)/entry.asm
 	$(ASM) $(ASM_FLAGS) -f elf -o $(BIN)/entry.o $(SRC)/entry.asm
+
+$(BIN)/pmode.entry.o: $(SRC)/pmode.entry.asm
+	$(ASM) $(ASM_FLAGS) -f elf -o $(BIN)/pmode.entry.o $(SRC)/pmode.entry.asm

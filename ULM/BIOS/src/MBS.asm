@@ -1,6 +1,8 @@
 %ifndef __MBS_asm__
 %define __MBS_asm__
 
+[Bits 16]
+
 ; BIOS will load our MBS to the linear address 0x7c00.
 [org 0x7c00]
 
@@ -170,7 +172,7 @@ UEFIBrokenError_size EQU $ - UEFIBrokenError
 times 512 - 2 - 64 - 2 - 4 - 28 - ($ - $$) hlt
 
 ; Easter egg.
-EasterEgg db 0x00, "god help Â© Queen Anastasia", 0x00
+EasterEgg db 0x00, "god help © Queen Anastasia", 0x00
 
 ; Disk UID (4 bytes) and unused (2 bytes).
 Athena db 0x41, 0x74, 0x68, 0x65, 0x6e, 0x61
