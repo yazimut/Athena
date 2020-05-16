@@ -54,7 +54,7 @@ $(BIN)/pmode.entry.o: $(SRC)/pmode.entry.asm
 
 
 # interrupt.slib
-$(BIN)/interrupt.slib: $(BIN)/interrupt.o $(BIN)/PIC.o $(BIN)/APIC.o "$(BIN)/ISR\ Stub.o" "$(BIN)/ISR\ 32.o"
+$(BIN)/interrupt.slib: $(BIN)/interrupt.o $(BIN)/PIC.o $(BIN)/APIC.o "$(BIN)/ISR\ Stub.o" "$(BIN)/ISR\ 32.o" "$(BIN)/ISR\ 48.o"
 	$(LINK) $(LINK_ARGV) -r -o $(BIN)/interrupt.slib $^
 
 $(BIN)/interrupt.o: $(SRC)/interrupt.asm $(INC)/interrupt.inc.asm
@@ -71,3 +71,6 @@ $(BIN)/APIC.o: $(SRC)/APIC.asm $(INC)/APIC.inc.asm
 
 "$(BIN)/ISR\ 32.o": $(SRC)/Interrupts/ISR\ 32.asm $(INC)/interrupt.inc.asm
 	$(ASM) $(ASM_FLAGS) -o $(BIN)/ISR\ 32.o $(SRC)/Interrupts/ISR\ 32.asm
+
+"$(BIN)/ISR\ 48.o": $(SRC)/Interrupts/ISR\ 48.asm $(INC)/interrupt.inc.asm
+	$(ASM) $(ASM_FLAGS) -o $(BIN)/ISR\ 48.o $(SRC)/Interrupts/ISR\ 48.asm

@@ -15,6 +15,9 @@
     ; ISR #32 - IRQ #0 "System timer #0"
     declare(_ISR_32, function)
 
+    ; ISR #48 - Video service
+    declare(_ISR_48, function)
+
     ; Allocate Interrupt Descriptor Table
     ;   Input:
     ;    * AX           - IDT segment selector

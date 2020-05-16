@@ -53,6 +53,19 @@ _pmode_entry:
 	xor CL, CL
 	call _PIC_unmask_IRQ
 
+	; Setup ISR #48 - Video service
+	mov BX, 48
+	mov AX, CS
+	mov ECX, _ISR_48
+	mov DL, 1_00_0_1110b	; Type=32-bit Int Gate, S=0, DPL=0, P=1
+	call _setIntGateDescriptor
+
+	; Set cursor position out of the bounds
+	; of the screen
+	mov AH, 0x02
+	mov DX, 0x1900
+	int 0x30
+
 	sti
 
 	hlt
