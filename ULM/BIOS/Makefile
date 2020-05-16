@@ -10,10 +10,10 @@ export INC=./include
 
 # Compilers
 export ASM=nasm
-export ASM_FLAGS=-i $(INC)/
+export ASM_FLAGS=-i $(INC)/ -f elf
 export DISASM=ndisasm
 export LINK=ld
-export LINK_ARGV=-m elf_i386 -T UEFI.ld
+export LINK_ARGV=-m elf_i386
 
 .PHONY: build clean all re-make
 
@@ -25,6 +25,7 @@ clean:
 	rm -f $(BIN)/*.bin
 	rm -f $(BIN)/*.o
 	rm -f $(BIN)/*.elf
+	rm -f $(BIN)/*.slib
 
 all: build MBS.disasm
 
@@ -41,12 +42,32 @@ MBS.disasm: $(BIN)/MBS.bin
 
 
 # UEFI imitation
-$(BIN)/UEFI.elf: $(BIN)/entry.o $(BIN)/pmode.entry.o
-	$(LINK) $(LINK_ARGV) -o $(BIN)/UEFI.elf $^
+$(BIN)/UEFI.elf: $(BIN)/entry.o $(BIN)/pmode.entry.o $(BIN)/interrupt.slib
+	$(LINK) $(LINK_ARGV) -T UEFI.ld -o $(BIN)/UEFI.elf $^
 	"./check UEFI.elf.sh"
 
 $(BIN)/entry.o: $(SRC)/entry.asm
-	$(ASM) $(ASM_FLAGS) -f elf -o $(BIN)/entry.o $(SRC)/entry.asm
+	$(ASM) $(ASM_FLAGS) -o $(BIN)/entry.o $(SRC)/entry.asm
 
 $(BIN)/pmode.entry.o: $(SRC)/pmode.entry.asm
-	$(ASM) $(ASM_FLAGS) -f elf -o $(BIN)/pmode.entry.o $(SRC)/pmode.entry.asm
+	$(ASM) $(ASM_FLAGS) -o $(BIN)/pmode.entry.o $(SRC)/pmode.entry.asm
+
+
+# interrupt.slib
+$(BIN)/interrupt.slib: $(BIN)/interrupt.o $(BIN)/PIC.o $(BIN)/APIC.o "$(BIN)/ISR\ Stub.o" "$(BIN)/ISR\ 32.o"
+	$(LINK) $(LINK_ARGV) -r -o $(BIN)/interrupt.slib $^
+
+$(BIN)/interrupt.o: $(SRC)/interrupt.asm $(INC)/interrupt.inc.asm
+	$(ASM) $(ASM_FLAGS) -o $(BIN)/interrupt.o $(SRC)/interrupt.asm
+
+$(BIN)/PIC.o: $(SRC)/PIC.asm $(INC)/PIC.inc.asm
+	$(ASM) $(ASM_FLAGS) -o $(BIN)/PIC.o $(SRC)/PIC.asm
+
+$(BIN)/APIC.o: $(SRC)/APIC.asm $(INC)/APIC.inc.asm
+	$(ASM) $(ASM_FLAGS) -o $(BIN)/APIC.o $(SRC)/APIC.asm
+
+"$(BIN)/ISR\ Stub.o": $(SRC)/Interrupts/ISR\ Stub.asm $(INC)/interrupt.inc.asm
+	$(ASM) $(ASM_FLAGS) -o $(BIN)/ISR\ Stub.o $(SRC)/Interrupts/ISR\ Stub.asm
+
+"$(BIN)/ISR\ 32.o": $(SRC)/Interrupts/ISR\ 32.asm $(INC)/interrupt.inc.asm
+	$(ASM) $(ASM_FLAGS) -o $(BIN)/ISR\ 32.o $(SRC)/Interrupts/ISR\ 32.asm

@@ -4,7 +4,8 @@
 [Bits 16]
 
 global _entry
-global BIOSDataArea
+global BIOSDataArea:data
+global GDTR:data
 extern _pmode_entry
 
 section .text
@@ -60,7 +61,7 @@ _entry:
 	or AL, 00000010b
 	out 0x92, AL
 
-	call allocateGDT
+	call allocateGDT	; Allocating Global Descriptors Table
 
 	mov EAX, CR0
 	or AL, 00000001b
@@ -176,7 +177,7 @@ ret
 
 section .data
 
-	; Pointer to Global Descriptor Table
+	; Pointer to Global Descriptors Table
 	;  GDTR image
 	GDTR:
 		.GDT_Limit   dw 0xffff
