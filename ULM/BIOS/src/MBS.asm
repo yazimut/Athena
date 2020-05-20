@@ -45,12 +45,12 @@ mov AX, 0x0003			; Text 80x25 colored.
 int 0x10
 
 ; Clear screen
-mov AX, 0x0f20			; Light-gray spaces on black background.
-mov ECX, 80*25
+mov AX, 0x0f20			; White symbols on black background.
+mov ECX, 0x7fff / 2
 clrscr:
-	mov [ES:DI], AX
-	inc DI				; Double "inc DI" has less op-code length 
-	inc DI				; than "add DI, 2".
+	mov [ES:EDI], AX
+	inc EDI				; Double "inc EDI" has less op-code length 
+	inc EDI				; than "add EDI, 2".
 loop clrscr
 
 ; Reading first 64 sectors of UEFI.elf from the disk
@@ -73,34 +73,29 @@ mov ECX, LBAReadError_size
 jc _printError
 
 ; Parsing UEFI.elf
-mov AX, 0x7000		; UEFI.elf address
+mov AX, 0x7000				; UEFI.elf address
 mov DS, AX
 
 ; Check ELF signature
-mov EAX, [0x00]				; Read 4 bytes - signature
+mov EAX, dword [0x00]		; Read 4 bytes - signature
 cmp EAX, 0x464c457f			; db 7f, "ELF"
 mov ESI, UEFIBrokenError
 mov ECX, UEFIBrokenError_size
 jne _printError
 
 ; Loading program to the memory
-xor EAX, EAX
-mov EBP, [0x1c]				; dd e_phoff 		- Offset of Programs Headers
-add EBP, EAX				; Program "LOAD" Header offset
+mov EBP, [0x1c]				; dd e_phoff - Offset of Program Header "LOAD"
 mov ESI, [DS:EBP + 0x04]	; Program "LOAD" offset
-mov ECX, [DS:EBP + 0x0f]	; Program "LOAD" size
-push 0x3080					; Segment ".text"
+mov ECX, [DS:EBP + 0x10]	; Program "LOAD" size
+push 0x3080					; Segment ".text" + ".data" + ".bss"
 pop ES						;
 xor EDI, EDI				; destination address
 cld
 rep movsb
 
-mov EAX, [0x18]				; dd e_entry		- Entry point
-; Jump to UEFI.elf
-mov [CS:offs], AX
-jump: db 0xea
-offs: dw 0x0000
-segm: dw 0x3080
+mov EAX, [0x18]				; dd e_entry - Entry point
+mov [$+4+1], AX				; Write real entry point address to far jump.
+jmp 0x3080:0x0000			; Jump to UEFI.elf:_entry
 
 ; In case of exceptions.
 hlt

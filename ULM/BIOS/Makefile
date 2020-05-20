@@ -54,7 +54,7 @@ $(BIN)/pmode.entry.o: $(SRC)/pmode.entry.asm
 
 
 # interrupt.slib
-$(BIN)/interrupt.slib: $(BIN)/interrupt.o $(BIN)/PIC.o $(BIN)/APIC.o "$(BIN)/ISR\ Stub.o" "$(BIN)/ISR\ 32.o" "$(BIN)/ISR\ 48.o"
+$(BIN)/interrupt.slib: $(BIN)/interrupt.o $(BIN)/PIC.o $(BIN)/APIC.o $(BIN)/ISR_Stub.o $(BIN)/ISR_32.o $(BIN)/ISR_48.o
 	$(LINK) $(LINK_ARGV) -r -o $(BIN)/interrupt.slib $^
 
 $(BIN)/interrupt.o: $(SRC)/interrupt.asm $(INC)/interrupt.inc.asm
@@ -66,11 +66,11 @@ $(BIN)/PIC.o: $(SRC)/PIC.asm $(INC)/PIC.inc.asm
 $(BIN)/APIC.o: $(SRC)/APIC.asm $(INC)/APIC.inc.asm
 	$(ASM) $(ASM_FLAGS) -o $(BIN)/APIC.o $(SRC)/APIC.asm
 
-"$(BIN)/ISR\ Stub.o": $(SRC)/Interrupts/ISR\ Stub.asm $(INC)/interrupt.inc.asm
-	$(ASM) $(ASM_FLAGS) -o $(BIN)/ISR\ Stub.o $(SRC)/Interrupts/ISR\ Stub.asm
+$(BIN)/ISR_Stub.o: $(SRC)/Interrupts/ISR_Stub.asm $(INC)/interrupt.inc.asm
+	$(ASM) $(ASM_FLAGS) -o $(BIN)/ISR_Stub.o $(SRC)/Interrupts/ISR_Stub.asm
 
-"$(BIN)/ISR\ 32.o": $(SRC)/Interrupts/ISR\ 32.asm $(INC)/interrupt.inc.asm
-	$(ASM) $(ASM_FLAGS) -o $(BIN)/ISR\ 32.o $(SRC)/Interrupts/ISR\ 32.asm
+$(BIN)/ISR_32.o: $(SRC)/Interrupts/ISR_32.asm $(INC)/interrupt.inc.asm
+	$(ASM) $(ASM_FLAGS) -o $(BIN)/ISR_32.o $(SRC)/Interrupts/ISR_32.asm
 
-"$(BIN)/ISR\ 48.o": $(SRC)/Interrupts/ISR\ 48.asm $(INC)/interrupt.inc.asm
-	$(ASM) $(ASM_FLAGS) -o $(BIN)/ISR\ 48.o $(SRC)/Interrupts/ISR\ 48.asm
+$(BIN)/ISR_48.o: $(SRC)/Interrupts/ISR_48.asm $(INC)/interrupt.inc.asm
+	$(ASM) $(ASM_FLAGS) -o $(BIN)/ISR_48.o $(SRC)/Interrupts/ISR_48.asm

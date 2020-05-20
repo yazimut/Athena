@@ -25,14 +25,6 @@ _pmode_entry:
 	mov ES, AX			; Not initialized!
 	mov FS, AX			; Not initialized!
 
-	mov AL, '0'
-	mov [GS:0 << 1], AL
-	mov [GS:1 << 1], AL
-	mov [GS:3 << 1], AL
-	mov [GS:4 << 1], AL
-	mov AL, ':'
-	mov [GS:4], AL
-
 	; Initialization of interrupts mechanism
 	mov AX, 0x02 << 3	; RPL=0, TI=GDT, Index=2
 	xor EBX, EBX
@@ -60,13 +52,18 @@ _pmode_entry:
 	mov DL, 1_00_0_1110b	; Type=32-bit Int Gate, S=0, DPL=0, P=1
 	call _setIntGateDescriptor
 
-	; Set cursor position out of the bounds
-	; of the screen
-	mov AH, 0x02
-	mov DX, 0x1900
+	sti
+
+	; Set cursor position on the
+	; row #1, column #0
+	mov AH, 0x08
+	mov DX, (1 << 8) + 0
 	int 0x30
 
-	sti
+	; Print ASCII-Z string
+	mov AH, 0x06
+	mov EBX, Message
+	int 0x30
 
 	hlt
 	jmp $
@@ -74,6 +71,7 @@ _pmode_entry:
 
 section .data
 	
-	;
+	Message db "Hello, Int 0x30! :)", 0x0a, 0x00
+
 
 %endif ; __pmode_entry_asm__
