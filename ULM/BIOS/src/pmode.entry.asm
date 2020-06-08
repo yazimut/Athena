@@ -4,6 +4,8 @@
 %include "interrupt.inc.asm"
 %include "PIC.inc.asm"
 
+%include "keyboard.inc.asm"
+
 [Bits 32]
 
 global _pmode_entry
@@ -45,12 +47,24 @@ _pmode_entry:
 	xor CL, CL
 	call _PIC_unmask_IRQ
 
+	; Setup ISR #33 - IRQ #1 "AT or PS/2 keyboard"
+	mov BX, 33
+	mov AX, CS
+	mov ECX, _ISR_33
+	mov DL, 1_00_0_1110b	; Type=32-bit Int Gate, S=0, DPL=0, P=1
+	call _setIntGateDescriptor
+	mov CL, 1
+	call _PIC_unmask_IRQ
+
 	; Setup ISR #48 - Video service
 	mov BX, 48
 	mov AX, CS
 	mov ECX, _ISR_48
 	mov DL, 1_00_0_1110b	; Type=32-bit Int Gate, S=0, DPL=0, P=1
 	call _setIntGateDescriptor
+
+	call _KBD_init
+	call _KBD_NumLock_enable
 
 	sti
 
@@ -71,7 +85,7 @@ _pmode_entry:
 
 section .data
 	
-	Message db "Hello, Int 0x30! :)", 0x0a, 0x00
+	Message db "Hello, I am Athena ULM bootloader! :)", 0x0a, 0x00
 
 
 %endif ; __pmode_entry_asm__

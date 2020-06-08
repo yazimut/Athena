@@ -7,13 +7,15 @@
     %define declare(symbol, type) extern symbol
 %endif ; __interrupt_asm__
 
-
 ; Functions
     ; ISR stub
     declare(_ISR_Stub, function)
 
     ; ISR #32 - IRQ #0 "System timer #0"
     declare(_ISR_32, function)
+
+    ; ISR #33 - IRQ #1 "AT or PS/2 keyboard"
+    declare(_ISR_33, function)
 
     ; ISR #48 - Video service
     declare(_ISR_48, function)

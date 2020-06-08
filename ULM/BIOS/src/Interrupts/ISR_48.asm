@@ -109,7 +109,7 @@ _ISR_48_0x02:
 
         mov EDI, buffer
         mov ECX, 80
-        .clrbuf
+        .clrbuf:
             mov word [EDI], AX
             inc EDI
             inc EDI

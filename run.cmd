@@ -38,7 +38,7 @@ if %DEBUG% == "true" (
 	if "%1" == "QEMU" (
 		echo "%QEMU%" %QEMU_ARGS% -hda "%bootable%"
 	) else if "%1" == "Bochs" (
-		echo "%BOCHS%" %BOCHS_ARGS% -f "%BOCHS_CONFIG%" -log "%BOCHS_LOG%"  -dbglog "%BOCHS_DEBUG_LOG%"
+		echo "%BOCHS%" %BOCHS_ARGS% -f "%BOCHS_CONFIG%" -log "%BOCHS_LOG%" -dbglog "%BOCHS_DEBUG_LOG%"
 	) else (
 		echo Error! Wrong virtual machine. Available - QEMU, Bochs.
 	)
@@ -48,7 +48,7 @@ if %DEBUG% == "true" (
 		"%QEMU%" %QEMU_ARGS% -hda "%bootable%"
 	) else if "%1" == "Bochs" (
 		echo Running Athena under the Bochs on Windows machine
-		"%BOCHS%" %BOCHS_ARGS% -f "%BOCHS_CONFIG%" -log "%BOCHS_LOG%"  -dbglog "%BOCHS_DEBUG_LOG%"
+		"%BOCHS%" %BOCHS_ARGS% -f "%BOCHS_CONFIG%" -log "%BOCHS_LOG%" -dbglog "%BOCHS_DEBUG_LOG%"
 	) else (
 		echo Error! Wrong virtual machine. Available - QEMU, Bochs.
 	)

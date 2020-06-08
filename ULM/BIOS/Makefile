@@ -42,7 +42,7 @@ MBS.disasm: $(BIN)/MBS.bin
 
 
 # UEFI imitation
-$(BIN)/UEFI.elf: $(BIN)/entry.o $(BIN)/pmode.entry.o $(BIN)/interrupt.slib
+$(BIN)/UEFI.elf: $(BIN)/entry.o $(BIN)/pmode.entry.o $(BIN)/interrupt.slib $(BIN)/keyboard.o
 	$(LINK) $(LINK_ARGV) -T UEFI.ld -o $(BIN)/UEFI.elf $^
 	"./check UEFI.elf.sh"
 
@@ -52,9 +52,12 @@ $(BIN)/entry.o: $(SRC)/entry.asm
 $(BIN)/pmode.entry.o: $(SRC)/pmode.entry.asm
 	$(ASM) $(ASM_FLAGS) -o $(BIN)/pmode.entry.o $(SRC)/pmode.entry.asm
 
+$(BIN)/keyboard.o: $(SRC)/keyboard.asm $(INC)/keyboard.inc.asm
+	$(ASM) $(ASM_FLAGS) -o $(BIN)/keyboard.o $(SRC)/keyboard.asm
+
 
 # interrupt.slib
-$(BIN)/interrupt.slib: $(BIN)/interrupt.o $(BIN)/PIC.o $(BIN)/APIC.o $(BIN)/ISR_Stub.o $(BIN)/ISR_32.o $(BIN)/ISR_48.o
+$(BIN)/interrupt.slib: $(BIN)/interrupt.o $(BIN)/PIC.o $(BIN)/APIC.o $(BIN)/ISR_Stub.o $(BIN)/ISR_32.o $(BIN)/ISR_33.o $(BIN)/ISR_48.o
 	$(LINK) $(LINK_ARGV) -r -o $(BIN)/interrupt.slib $^
 
 $(BIN)/interrupt.o: $(SRC)/interrupt.asm $(INC)/interrupt.inc.asm
@@ -71,6 +74,9 @@ $(BIN)/ISR_Stub.o: $(SRC)/Interrupts/ISR_Stub.asm $(INC)/interrupt.inc.asm
 
 $(BIN)/ISR_32.o: $(SRC)/Interrupts/ISR_32.asm $(INC)/interrupt.inc.asm
 	$(ASM) $(ASM_FLAGS) -o $(BIN)/ISR_32.o $(SRC)/Interrupts/ISR_32.asm
+
+$(BIN)/ISR_33.o: $(SRC)/Interrupts/ISR_33.asm $(INC)/interrupt.inc.asm
+	$(ASM) $(ASM_FLAGS) -o $(BIN)/ISR_33.o $(SRC)/Interrupts/ISR_33.asm
 
 $(BIN)/ISR_48.o: $(SRC)/Interrupts/ISR_48.asm $(INC)/interrupt.inc.asm
 	$(ASM) $(ASM_FLAGS) -o $(BIN)/ISR_48.o $(SRC)/Interrupts/ISR_48.asm
